@@ -1,20 +1,25 @@
 #include "clause.h"
 
+/**
+ * @brief "formula" is linked-list. Contains list of clauses.
+ *          Evaluated based on conjunction (AND).
+ * 
+ */
 class formula
 {
-    struct node
+    class node
     {
-        clause* val;
+        clause& val;
         node* next;
+        friend class formula;
 
-        node(clause* other)
-        {
-            val = other;
-            next = NULL;
-        }
+    public:
+        node(clause& other)
+            : val(other), next(NULL) {}
 
         ~node()
         {
+            delete &val;
             delete next;
         }
     };
@@ -24,7 +29,7 @@ public:
     formula();
     ~formula();
 
-    void addClause(clause* other);
+    void addClause(clause& other);
 
     bool evaluate();
 };

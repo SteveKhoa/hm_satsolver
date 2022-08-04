@@ -1,18 +1,22 @@
 #include "term.h"
 #define NULL 0
 
+/**
+ * @brief "Clause" is linked-list. Contains a list of terms.
+ *          Evaluated based on disjunction (OR).
+ * 
+ */
 class clause
 {
-    struct node
+    class node
     {
-        term * val;
+        term val;
         node* next;
 
-        node(term* other)
-        {
-            val = other;
-            next = NULL;
-        }
+        friend class clause;
+    public:
+        node(term other)
+            : val(other), next(NULL) {}
         ~node()
         {
             delete next;
@@ -24,7 +28,7 @@ public:
     clause();
     ~clause();
 
-    void addTerm(term* other);
+    void addTerm(term other);
 
     bool evaluate();
 };

@@ -11,7 +11,7 @@ clause::~clause()
     delete head;
 }
 
-void clause::addTerm(term *other)
+void clause::addTerm(term other)
 {
     if (head == NULL)
     {
@@ -20,11 +20,16 @@ void clause::addTerm(term *other)
     }
 
     node *walker = head;
+    if (walker->next == NULL)
+    {
+        walker->next = new node(other);
+        return;
+    }
+
     while (walker->next != NULL)
     {
         walker = walker->next;
     }
-
     walker->next = new node(other);
 }
 
@@ -34,7 +39,7 @@ bool clause::evaluate()
         return false;
 
     node *walker = head;
-    if (walker->val->evaluate() == true)
+    if (walker->val.evaluate() == true)
     {
         return true;
     }
@@ -42,7 +47,7 @@ bool clause::evaluate()
     while (walker->next != NULL)
     {
         walker = walker->next;
-        if (walker->val->evaluate() == true)
+        if (walker->val.evaluate() == true)
         {
             return true;
         }

@@ -9,7 +9,9 @@ class cnf
     formula * host_formula;
 
     std::queue<term> termQueue;
-    std::queue<clause> clauseQueue;
+    // queue<clause*> contains reference to allocated "clauses". 
+    // DO NOT DELETE allocated "clauses" using this queue, since the "clauses" are responsible by (formula *)
+    std::queue<clause*> clauseQueue;
 public:
     cnf(int numVars);
     ~cnf();

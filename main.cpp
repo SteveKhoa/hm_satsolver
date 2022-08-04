@@ -1,6 +1,5 @@
 #include <iostream>
 #include "sudoku/sudoku.h"
-#include "simpleB.h"
 
 // Build sudoku solver with SAT
 // MIT assignment
@@ -13,7 +12,6 @@ int main()
         s.set(9, 2, 1, 1, 0);
         s.print();
     }
-    checkleak();
 
     return 0;
 }

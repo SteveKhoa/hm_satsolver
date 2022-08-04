@@ -10,17 +10,25 @@ formula::~formula()
     delete head;
 }
 
-void formula::addClause(clause* other)
+void formula::addClause(clause& other)
 {
     if (head == NULL)
+    {
         head = new node(other);
+        return;
+    }
     
     node* walker = head;
-    if (walker->next != NULL)
+    if (walker->next == NULL)
+    {
+        walker->next = new node(other);
+        return;
+    }
+
+    while (walker->next != NULL)
     {
         walker = walker->next;
     }
-
     walker->next = new node(other);
 }
 
@@ -30,13 +38,13 @@ bool formula::evaluate()
         return false;
 
     node* walker = head;
-    if (walker->val->evaluate() == false)
+    if (walker->val.evaluate() == false)
         return false;
     
     while (walker->next != NULL)
     {
         walker = walker->next;
-        if (walker->val->evaluate() == false)
+        if (walker->val.evaluate() == false)
             return false;
     }
 

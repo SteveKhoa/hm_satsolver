@@ -4,3 +4,4 @@ makefile
 program
 .vscode
 sudoku/manifest.h
+note.cpp

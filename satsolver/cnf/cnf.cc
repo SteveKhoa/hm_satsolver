@@ -1,9 +1,10 @@
 #include "cnf.h"
+#include <iostream>
 
 cnf::cnf(int numVars)
 {
     var_table = new bool[numVars];
-    host_formula = NULL;
+    host_formula = new formula;
 }
 
 cnf::~cnf()
@@ -37,10 +38,10 @@ void cnf::makeTerm(term other)
 
 void cnf::buildClause()
 {
-    clause tmp;
+    clause * tmp = new clause;
     while (!termQueue.empty())
     {
-        tmp.addTerm(&termQueue.front());
+        tmp->addTerm(termQueue.front());
         termQueue.pop();
     }
     clauseQueue.push(tmp);
@@ -50,7 +51,7 @@ void cnf::buildFormula()
 {
     while (!clauseQueue.empty())
     {
-        host_formula->addClause(&clauseQueue.front());
+        host_formula->addClause(*clauseQueue.front());
         clauseQueue.pop();
     }
 }
