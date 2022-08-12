@@ -3,6 +3,7 @@
 
 clause::clause()
 {
+    last_truth_value = false;
     head = NULL;
 }
 
@@ -33,10 +34,22 @@ void clause::addTerm(term other)
     walker->next = new node(other);
 }
 
+void clause::setLastTruthValue(bool truth)
+{
+    last_truth_value = truth;
+}
+
+bool clause::lastTruthValue()
+{
+    return last_truth_value;
+}
+
 bool clause::evaluate()
 {
     if (head == NULL)
+    {
         return false;
+    }
 
     node *walker = head;
     if (walker->val.evaluate() == true)

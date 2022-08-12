@@ -3,6 +3,7 @@
 
 cnf::cnf(int numVars)
 {
+    num_vars = numVars;
     var_table = new bool[numVars];
     host_formula = new formula;
 }
@@ -21,6 +22,81 @@ void cnf::setVar(int var_idx, bool truth)
     var_table[var_idx] = truth;
 }
 
+std::queue<bool> cnf::trace_ClauseTruths()
+{
+    std::queue<bool> trace;
+
+    if (host_formula->head == NULL)
+    {
+        std::cout << "Warning: CNF currently holds NO formula.\n";
+        throw std::runtime_error("cnf::trace_ClauseTruths()");
+    }
+
+    formula::node* walker = host_formula->head;
+    trace.push(host_formula->head->val.lastTruthValue());
+
+    while (walker->next != NULL)
+    {
+        walker = walker->next;
+        trace.push(host_formula->head->val.lastTruthValue());
+    }
+
+    return trace;
+}
+
+void cnf::backtrack_ClauseTruths(std::queue<bool>& trace)
+{
+    if (host_formula->head == NULL)
+    {
+        std::cout << "Warning: CNF currently holds NO formula.\n";
+        throw std::runtime_error("cnf::trace_ClauseTruths()");
+    }
+
+    formula::node* walker = host_formula->head;
+    walker->val.setLastTruthValue(trace.front());
+    trace.pop();
+
+    while (walker->next != NULL)
+    {
+        walker = walker->next;
+        walker->val.setLastTruthValue(trace.front());
+        trace.pop();
+    }
+}
+
+bool cnf::substitute(int var_idx, bool truth)
+{
+    bool last_var_value = var_table[var_idx];
+    setVar(var_idx, truth);
+
+    if (host_formula->head == NULL)
+    {
+        std::cout << "Warning: CNF currently holds NO formula.\n";
+        return false;
+    }
+
+    formula::node* walker = host_formula->head;
+    if (walker->val.lastTruthValue() == true && walker->val.evaluate() == false)
+    {
+        setVar(var_idx, last_var_value);
+        return false;
+    }
+    walker->val.setLastTruthValue(walker->val.evaluate());
+    
+    while (walker->next != NULL)
+    {
+        walker = walker->next;
+        if (walker->val.lastTruthValue() == true && walker->val.evaluate() == false)
+        {
+            setVar(var_idx, last_var_value);
+            return false;
+        }
+        walker->val.setLastTruthValue(walker->val.evaluate());
+    }
+
+    return true;
+}
+
 bool cnf::isSAT()
 {
     return host_formula->evaluate();
@@ -31,9 +107,9 @@ bool* cnf::ref(int var_idx)
     return &var_table[var_idx];
 }
 
-void cnf::makeTerm(term other)
+void cnf::makeTerm(int var_idx, bool neg)
 {
-    termQueue.push(other);
+    termQueue.push(term(this->ref(var_idx), neg));
 }
 
 void cnf::buildClause()
@@ -54,6 +130,13 @@ void cnf::buildFormula()
         host_formula->addClause(*clauseQueue.front());
         clauseQueue.pop();
     }
+
+    host_formula->evaluate();
+}
+
+int cnf::getNumVars()
+{
+    return num_vars;
 }
 
 void cnf::clear()

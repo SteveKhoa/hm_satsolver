@@ -6,6 +6,7 @@
 class cnf
 {
     bool * var_table;
+    unsigned int num_vars;
     formula * host_formula;
 
     std::queue<term> termQueue;
@@ -17,13 +18,19 @@ public:
     ~cnf();
 
     void setVar(int var_idx, bool truth);
+    bool substitute(int var_idx, bool truth);
     bool isSAT();
 
     bool* ref(int var_idx);
 
-    void makeTerm(term other);
+    void makeTerm(int var_idx, bool neg);
     void buildClause();
     void buildFormula();
 
+    int getNumVars();
+
     void clear();
+public:
+    std::queue<bool> trace_ClauseTruths();
+    void backtrack_ClauseTruths(std::queue<bool>& trace);
 };

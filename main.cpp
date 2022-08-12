@@ -7,11 +7,6 @@
 
 int main()
 {
-    {
-        sudoku s("sudoku/sudoku.txt");
-        s.set(9, 2, 1, 1, 0);
-        s.print();
-    }
 
     return 0;
 }

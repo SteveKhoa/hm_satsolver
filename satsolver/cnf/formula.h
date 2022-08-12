@@ -7,11 +7,13 @@
  */
 class formula
 {
+    friend class cnf;
     class node
     {
         clause& val;
         node* next;
         friend class formula;
+        friend class cnf;
 
     public:
         node(clause& other)

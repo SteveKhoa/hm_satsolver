@@ -1,5 +1,8 @@
 #include "term.h"
+
+#ifndef NULL
 #define NULL 0
+#endif
 
 /**
  * @brief "Clause" is linked-list. Contains a list of terms.
@@ -24,11 +27,14 @@ class clause
     };
 
     node* head;
+    bool last_truth_value;
 public:
     clause();
     ~clause();
 
     void addTerm(term other);
+    void setLastTruthValue(bool truth);
+    bool lastTruthValue();
 
     bool evaluate();
 };
