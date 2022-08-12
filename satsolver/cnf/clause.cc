@@ -12,6 +12,10 @@ clause::~clause()
     delete head;
 }
 
+/**
+ * @brief add a new term (as a node) to 'clause' linked list.
+ * 
+ */
 void clause::addTerm(term other)
 {
     if (head == NULL)
@@ -44,6 +48,9 @@ bool clause::lastTruthValue()
     return last_truth_value;
 }
 
+/**
+ * @brief evaluate the truth of clause, clause use OR in each of them.
+ */
 bool clause::evaluate()
 {
     if (head == NULL)

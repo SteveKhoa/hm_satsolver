@@ -17,18 +17,25 @@ void solver::solve()
     result();
 }
 
+/**
+ * @brief recursive method. Utilize backtracking to search for possible assignments.
+ * 
+ */
 bool solver::trySubstitute(int var_idx)
 {
+    // If all assignments witness no contradiction
     if (var_idx >= cnf_host->getNumVars())
     {
         return cnf_host->isSAT();
     }
 
+    // Use two distinctive queue for each assignment: 1 or 0
     std::queue<bool> trace_clausetruths1(cnf_host->trace_ClauseTruths());
     std::queue<bool> trace_clausetruths2(cnf_host->trace_ClauseTruths());
 
     if (cnf_host->substitute(var_idx, 1))
     {
+        // backtracking;
         if (trySubstitute(var_idx + 1))
         {
             return true;
@@ -38,6 +45,7 @@ bool solver::trySubstitute(int var_idx)
 
     if (cnf_host->substitute(var_idx, 0))
     {
+        // backtracking;
         if (trySubstitute(var_idx + 1))
         {
             return true;

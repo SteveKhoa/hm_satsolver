@@ -22,6 +22,10 @@ void cnf::setVar(int var_idx, bool truth)
     var_table[var_idx] = truth;
 }
 
+/**
+ * @brief store current-state clauses' truths, used for backtracking.
+ *          This method comes with backtrack_ClauseTruths()
+ */
 std::queue<bool> cnf::trace_ClauseTruths()
 {
     std::queue<bool> trace;
@@ -44,6 +48,11 @@ std::queue<bool> cnf::trace_ClauseTruths()
     return trace;
 }
 
+/**
+ * @brief use last-state clauses' truths, reassign back to clauses.
+ *        Now, last-state clauses' truths are achieved.
+ *          This method comes with trace_ClauseTruths()
+ */
 void cnf::backtrack_ClauseTruths(std::queue<bool>& trace)
 {
     if (host_formula->head == NULL)
@@ -64,6 +73,16 @@ void cnf::backtrack_ClauseTruths(std::queue<bool>& trace)
     }
 }
 
+/**
+ * @brief Check if a substitution is acceptable or not.
+ *        
+ *        A substitution is called acceptable if:
+ *          - It does not change TRUE clause to FALSE clause.
+ * 
+ *        Note that, if the substitution is not acceptable:
+ *          - reclaim the last-state values (but lastTruthValue is not reclaimed, use backtrack_ClauseTruths())
+ * 
+ */
 bool cnf::substitute(int var_idx, bool truth)
 {
     bool last_var_value = var_table[var_idx];

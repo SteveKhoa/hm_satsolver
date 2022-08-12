@@ -11,7 +11,7 @@ class cnf
 
     std::queue<term> termQueue;
     // queue<clause*> contains reference to allocated "clauses". 
-    // DO NOT DELETE allocated "clauses" using this queue, since the "clauses" are responsible by (formula *)
+    // DO NOT deallocated "clauses" using this queue, since the "clauses" are responsible by (formula *)-pointer.
     std::queue<clause*> clauseQueue;
 public:
     cnf(int numVars);

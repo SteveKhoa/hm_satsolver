@@ -32,6 +32,9 @@ void formula::addClause(clause& other)
     walker->next = new node(other);
 }
 
+/**
+ * @brief evaluate truth of formula (set clauses). Use AND.
+ */
 bool formula::evaluate()
 {
     if (head == NULL)
